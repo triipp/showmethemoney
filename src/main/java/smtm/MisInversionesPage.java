@@ -2,6 +2,7 @@ package smtm;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MisInversionesPage extends BasePage {
@@ -12,6 +13,7 @@ public class MisInversionesPage extends BasePage {
     private By itemComprarButton = By.xpath("//p[text()='Comprar']/following-sibling::button");
     private By itemVenderBox = By.xpath("//p[text()='Vender']/following-sibling::input");
     private By itemVenderButton = By.xpath("//p[text()='Vender']/following-sibling::button");
+    private By detailNofication = By.xpath("//*[@class='detail__notification']");
     private By myInvestmentItem;
     private By otherInvestmentItem;
     private By pieChartItem;
@@ -72,4 +74,10 @@ public class MisInversionesPage extends BasePage {
         pieChartItem = By.xpath("//*[@id='piechart']//*[name()='text' and contains(text(),'" + item + "')]");
         return this.getText(pieChartItem);
     }
+
+    public String getDetailNotification(String status) {
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(detailNofication, status));
+        return this.getText(detailNofication);
+    }
+
 }

@@ -45,6 +45,7 @@ public class BasePage {
     }
 
     protected String getText(By locator) {
+        wait.until(ExpectedConditions.presenceOfElementLocated(locator));
         return this.findElement(locator).getText();
     }
 }

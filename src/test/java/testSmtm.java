@@ -21,17 +21,15 @@ public class testSmtm {
         misInversionesPage = new MisInversionesPage(driver, wait);
         misInversionesPage.setup();
         misInversionesPage.url("https://sea-lion-app-7celq.ondigitalocean.app/");
-        Thread.sleep(2000);
     }
 
     @Test
     public void test_1() throws InterruptedException {
 
         misInversionesPage.clickMyInvestmentItem("Ternium Argentina");
-        Thread.sleep(2000);
         misInversionesPage.enterComprar("1");
         misInversionesPage.clickComprarButton();
-        Thread.sleep(5000);
+        misInversionesPage.getDetailNotification("Operación realizada.");
         System.out.println(misInversionesPage.getBalanceValue());
         assert misInversionesPage.getBalanceValue().equals("$ 41.873,75");
         System.out.println(misInversionesPage.getMyInvestmentItemUnits("Ternium Argentina"));
