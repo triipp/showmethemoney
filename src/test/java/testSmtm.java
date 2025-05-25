@@ -1,32 +1,35 @@
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 import org.junit.jupiter.api.Test;
+import smtm.MisInversionesPage;
 
-/* Adding a demo test to validate we can track elements */
+/* Adding a demo test to validate if the POM is working*/
 public class testSmtm {
     public WebDriver driver;
-
-    public void clickMyInvestmentItemTernium(String item) {
-        WebElement myInvestmentItem = driver.findElement(
-                By.xpath("//*[@class='my-investments']//button[text()='" + item + "']/following-sibling::button"));
-        myInvestmentItem.click();
-    }
+    public WebDriverWait wait;
 
     @Test
     public void test_1() throws InterruptedException {
         driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofMillis(3000));
+        MisInversionesPage misInversionesPage = new MisInversionesPage(driver, wait);
+        misInversionesPage.setup();
         driver.get("https://sea-lion-app-7celq.ondigitalocean.app/");
         Thread.sleep(2000);
+        misInversionesPage.clickMyInvestmentItem("Ternium Argentina");
 
-        WebElement balanceField = driver.findElement(By.className("my-investments"));
-
-        clickMyInvestmentItemTernium("Aluar");
-        System.err.println(balanceField.getText());
-        Assertions.assertTrue(balanceField.getText().contains("$ 42.000,00"));
-
-        // driver.quit();
+        Thread.sleep(2000);
+        misInversionesPage.enterComprar("1");
+        misInversionesPage.clickComprarButton();
+        Thread.sleep(5000);
+        System.out.println(misInversionesPage.getBalanceValue());
+        assert misInversionesPage.getBalanceValue().equals("$ 41.873,75");
+        System.out.println(misInversionesPage.getMyInvestmentItemUnits("Ternium Argentina"));
+        assert misInversionesPage.getMyInvestmentItemUnits("Ternium Argentina").equals("(11 unidades)");
+        misInversionesPage.clickMyInvestmentsButton();
+        assert misInversionesPage.getPieChartItemText("Ternium Argentina").equals("Ternium Argentina");
+        System.out.println(misInversionesPage.getPieChartItemText("Ternium Argentina"));
     }
 }
