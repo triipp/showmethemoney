@@ -2,6 +2,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import smtm.MisInversionesPage;
 
@@ -9,17 +12,22 @@ import smtm.MisInversionesPage;
 public class testSmtm {
     public WebDriver driver;
     public WebDriverWait wait;
+    MisInversionesPage misInversionesPage;
+
+    @BeforeEach
+    public void preconditions() throws InterruptedException {
+        driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofMillis(3000));
+        misInversionesPage = new MisInversionesPage(driver, wait);
+        misInversionesPage.setup();
+        misInversionesPage.url("https://sea-lion-app-7celq.ondigitalocean.app/");
+        Thread.sleep(2000);
+    }
 
     @Test
     public void test_1() throws InterruptedException {
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofMillis(3000));
-        MisInversionesPage misInversionesPage = new MisInversionesPage(driver, wait);
-        misInversionesPage.setup();
-        driver.get("https://sea-lion-app-7celq.ondigitalocean.app/");
-        Thread.sleep(2000);
-        misInversionesPage.clickMyInvestmentItem("Ternium Argentina");
 
+        misInversionesPage.clickMyInvestmentItem("Ternium Argentina");
         Thread.sleep(2000);
         misInversionesPage.enterComprar("1");
         misInversionesPage.clickComprarButton();
@@ -31,5 +39,10 @@ public class testSmtm {
         misInversionesPage.clickMyInvestmentsButton();
         assert misInversionesPage.getPieChartItemText("Ternium Argentina").equals("Ternium Argentina");
         System.out.println(misInversionesPage.getPieChartItemText("Ternium Argentina"));
+    }
+
+    @AfterEach
+    public void postconditions() {
+        misInversionesPage.close();
     }
 }
