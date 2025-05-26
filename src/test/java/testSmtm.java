@@ -4,10 +4,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 import helpers.ExtentFactory;
+import helpers.ScreenshotHelper;
 import smtm.pages.MisInversionesPage;
 
 import java.time.Duration;
@@ -45,7 +47,7 @@ public class testSmtm {
     }
 
     @Test
-    public void test_1() {
+    public void testBuyFromMyInvestment() {
         try {
             // TEST 1: Buy from my investment section - TEST STEPS
             test = extent.createTest("First test - Buy from my investment section");
@@ -58,28 +60,33 @@ public class testSmtm {
             test.log(Status.INFO, "Clicked on Comprar button");
             misInversionesPage.getDetailNotification("Operación realizada.");
             test.log(Status.INFO, "Verified operation notification: Operación realizada.");
-            Assertions.assertEquals(misInversionesPage.getBalanceValue(), "$ 41.873,75");
+            Assertions.assertEquals("$ 41.873,75", misInversionesPage.getBalanceValue());
             test.log(Status.INFO, "Verified balance value: $ 41.873,75");
-            Assertions.assertEquals(misInversionesPage.getMyInvestmentItemUnits("Ternium Argentina"), "(11 unidades)");
+            Assertions.assertEquals("(11 unidades)", misInversionesPage.getMyInvestmentItemUnits("Ternium Argentina"));
             test.log(Status.INFO, "Verified Ternium Argentina investment units: (11 unidades)");
             misInversionesPage.clickMyInvestmentsButton();
             test.log(Status.INFO, "Clicked on My Investments button");
-            Assertions.assertEquals(misInversionesPage.getPieChartItemText("Ternium Argentina"), "Ternium Argentina");
+            Assertions.assertEquals("Ternium Argentina", misInversionesPage.getPieChartItemText("Ternium Argentina"));
             test.log(Status.INFO, "Verified pie chart contains item text: Ternium Argentina");
             test.log(Status.PASS, "Test passed successfully");
             // END TEST 1
 
         } catch (AssertionError assertionError) {
-            test.log(Status.FAIL, "Assertion failed: " + assertionError.getMessage());
-            throw assertionError;
+            String screenshotPath = ScreenshotHelper.takeScreenshot(driver,
+                    Thread.currentThread().getStackTrace()[1].getMethodName());
+            test.fail("Assertion failure: " + assertionError.getMessage(),
+                    MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+
         } catch (Exception error) {
-            test.log(Status.FAIL, "Test failed due to: " + error.getMessage());
-            Assertions.fail("Test failed due to: " + error.getMessage());
+            String screenshotPath = ScreenshotHelper.takeScreenshot(driver,
+                    Thread.currentThread().getStackTrace()[1].getMethodName());
+            test.fail("Exception failure: " + error.getMessage(),
+                    MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
         }
     }
 
     @Test
-    public void test_2() {
+    public void testSellFromMyInvestment() {
         try {
             // TEST 2: Sell from my investment section - TEST STEPS
             test = extent.createTest("Second test - Sell from my investment section");
@@ -92,23 +99,28 @@ public class testSmtm {
             test.log(Status.INFO, "Clicked on Vender button");
             misInversionesPage.getDetailNotification("Operación realizada.");
             test.log(Status.INFO, "Verified operation notification: Operación realizada.");
-            Assertions.assertEquals(misInversionesPage.getBalanceValue(), "$ 42.126,25");
+            Assertions.assertEquals("$ 42.126,25", misInversionesPage.getBalanceValue());
             test.log(Status.INFO, "Verified balance value: $ 42.126,25");
-            Assertions.assertEquals(misInversionesPage.getMyInvestmentItemUnits("Ternium Argentina"), "(9 unidades)");
+            Assertions.assertEquals("(9 unidades)", misInversionesPage.getMyInvestmentItemUnits("Ternium Argentina"));
             test.log(Status.INFO, "Verified Ternium Argentina investment units: (9 unidades)");
             misInversionesPage.clickMyInvestmentsButton();
             test.log(Status.INFO, "Clicked on My Investments button");
-            Assertions.assertEquals(misInversionesPage.getPieChartItemText("Ternium Argentina"), "Ternium Argentina");
+            Assertions.assertEquals("Ternium Argentina", misInversionesPage.getPieChartItemText("Ternium Argentina"));
             test.log(Status.INFO, "Verified pie chart contains item text: Ternium Argentina");
             test.log(Status.PASS, "Test passed successfully");
             // END TEST 2
 
         } catch (AssertionError assertionError) {
-            test.log(Status.FAIL, "Assertion failed: " + assertionError.getMessage());
-            throw assertionError;
+            String screenshotPath = ScreenshotHelper.takeScreenshot(driver,
+                    Thread.currentThread().getStackTrace()[1].getMethodName());
+            test.fail("Assertion failure: " + assertionError.getMessage(),
+                    MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+
         } catch (Exception error) {
-            test.log(Status.FAIL, "Test failed due to: " + error.getMessage());
-            Assertions.fail("Test failed due to: " + error.getMessage());
+            String screenshotPath = ScreenshotHelper.takeScreenshot(driver,
+                    Thread.currentThread().getStackTrace()[1].getMethodName());
+            test.fail("Exception failure: " + error.getMessage(),
+                    MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
         }
     }
 
