@@ -1,4 +1,4 @@
-package smtm.helpers;
+package helpers;
 
 import com.aventstack.extentreports.ExtentReports;
 
