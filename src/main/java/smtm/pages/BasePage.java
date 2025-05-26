@@ -1,4 +1,4 @@
-package smtm;
+package smtm.pages;
 
 import java.time.Duration;
 
