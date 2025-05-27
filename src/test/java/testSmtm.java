@@ -47,7 +47,7 @@ public class testSmtm {
     }
 
     @Test
-    public void testBuyFromMyInvestment() {
+    public void testBuyFromMyInvestments() {
         try {
             // TEST 1: Buy from my investment section - TEST STEPS
             test = extent.createTest("First test - Buy from my investment section");
@@ -86,7 +86,7 @@ public class testSmtm {
     }
 
     @Test
-    public void testSellFromMyInvestment() {
+    public void testSellFromMyInvestments() {
         try {
             // TEST 2: Sell from my investment section - TEST STEPS
             test = extent.createTest("Second test - Sell from my investment section");
@@ -109,6 +109,46 @@ public class testSmtm {
             test.log(Status.INFO, "Verified pie chart contains item text: Ternium Argentina");
             test.log(Status.PASS, "Test passed successfully");
             // END TEST 2
+
+        } catch (AssertionError assertionError) {
+            String screenshotPath = ScreenshotHelper.takeScreenshot(driver,
+                    Thread.currentThread().getStackTrace()[1].getMethodName());
+            test.fail("Assertion failure: " + assertionError.getMessage(),
+                    MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+
+        } catch (Exception error) {
+            String screenshotPath = ScreenshotHelper.takeScreenshot(driver,
+                    Thread.currentThread().getStackTrace()[1].getMethodName());
+            test.fail("Exception failure: " + error.getMessage(),
+                    MediaEntityBuilder.createScreenCaptureFromPath(screenshotPath).build());
+        }
+    }
+
+    @Test
+    public void testBuyFromOtherInvestments() {
+        try {
+            // TEST 3: Buy from other investments section - Without holdings - TEST STEPS
+            test = extent.createTest("Second test - Sell from other investments section - User without holdings");
+            test.log(Status.INFO,
+                    "Starting test case: Second test - Sell from my investment section - User without holdings");
+            misInversionesPage.clickOtherInvestmentItem("BOCAN 2022");
+            test.log(Status.INFO, "Clicked on BOCAN 2022 investment item");
+            misInversionesPage.enterComprar("1");
+            test.log(Status.INFO, "Entered quantity to buy: 1");
+            misInversionesPage.clickComprarButton();
+            test.log(Status.INFO, "Clicked on Comprar button");
+            misInversionesPage.getDetailNotification("Operación realizada.");
+            test.log(Status.INFO, "Verified operation notification: Operación realizada.");
+            Assertions.assertEquals("$ 41.910,00", misInversionesPage.getBalanceValue());
+            test.log(Status.INFO, "Verified balance value: $ 41.910,00");
+            Assertions.assertEquals("(1 unidades)", misInversionesPage.getMyInvestmentItemUnits("BOCAN 2022"));
+            test.log(Status.INFO, "Verified BOCAN 2022 investment units: (1 unidades)");
+            misInversionesPage.clickMyInvestmentsButton();
+            test.log(Status.INFO, "Clicked on My Investments button");
+            Assertions.assertEquals("BOCAN 2022", misInversionesPage.getPieChartItemText("BOCAN 2022"));
+            test.log(Status.INFO, "Verified pie chart contains item text: BOCAN 2022");
+            test.log(Status.PASS, "Test passed successfully");
+            // END TEST 3
 
         } catch (AssertionError assertionError) {
             String screenshotPath = ScreenshotHelper.takeScreenshot(driver,
