@@ -27,6 +27,7 @@ Each activity is organized into its own folder for clarity. The current structur
 - ✅ Git + GitHub (version control)
 - ✅ Excel (for test cases)
 - ✅ Jira (for bug/improvement reporting)
+- ✅ Notion (for UAT test scenario)
 
 ---
 
