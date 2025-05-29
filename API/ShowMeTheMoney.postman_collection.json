@@ -1,0 +1,3761 @@
+{
+	"info": {
+		"_postman_id": "02bea369-ace8-410b-9baf-5be6619ff2e3",
+		"name": "ShowMeTheMoney",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21995749",
+		"_collection_link": "https://www.postman.com/crimson-crescent-543473/workspace/showmethemoney/collection/21995749-02bea369-ace8-410b-9baf-5be6619ff2e3?action=share&source=collection_link&creator=21995749"
+	},
+	"item": [
+		{
+			"name": "Automated-HappyPath",
+			"item": [
+				{
+					"name": "User-Porfolio - First navigation - Status 200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Request returns a 200 http status code",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    console.log(\"Request returned a 200 status code\");",
+									"});",
+									"",
+									"// Validate response body is a JSON",
+									"pm.test(\"Response body is a Json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"// Validate response time is less than 2 secs",
+									"pm.test(\"Response time is less than 2secs\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"    console.log(\"Response time was: \" + pm.response.responseTime);",
+									"});",
+									"",
+									"// Validate field savings is not null or undefined",
+									"pm.test(\"Field savings is not null or undefined\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"savings\");",
+									"    pm.expect(jsonData.savings).to.not.be.null;",
+									"    pm.expect(jsonData.savings).to.not.be.undefined;",
+									"    console.log(\"Saving field is present and it is not null or empty\");",
+									"});",
+									"",
+									"// Validate field investments is present and is an array",
+									"pm.test(\"Field investments is present and is an array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"investments\");",
+									"    pm.expect(jsonData.investments).to.be.an('array')",
+									"    console.log(\"Investment field is present and it is an array\");",
+									"});",
+									"",
+									"// Store cookie value for next executions",
+									"pm.collectionVariables.set(\"Savings\", pm.response.json().savings);",
+									"let item = pm.response.json().investments.find(i => i.name === pm.collectionVariables.get(\"Asset\"));",
+									"pm.collectionVariables.set(\"Holdings\", item.amountSubscribed); // store holdings of the asset used in tests",
+									"pm.collectionVariables.set(\"Cookie\", pm.response.headers.get(\"Set-Cookie\"));",
+									"pm.collectionVariables.set(\"DiffHoldings\", 0); // it will be use to count asset quantity of purchases",
+									"console.log(\"Savings saved. Value:\" + pm.response.json().savings);",
+									"console.log(\"Holdings saved. Value:\" + item.amountSubscribed);",
+									"console.log(\"Cookie saved. Value:\" + pm.response.headers.get(\"Set-Cookie\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"35f-WBJy3aaP8VK77AOf3OqA2gRI950\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "connect.sid=s%3Afake123456.abcdefg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/user-portfolio",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user-portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Available-Investiments- Status 200",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Request returns a 200 http status code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    console.log(\"Request returned a 200 status code\");\r",
+									"});\r",
+									"\r",
+									"// Validate response body is a JSON\r",
+									"pm.test(\"Response body is a Json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"// Validate response time is less than 2 secs\r",
+									"pm.test(\"Response time is less than 2secs\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"    console.log(\"Response time was: \" + pm.response.responseTime);\r",
+									"});\r",
+									"\r",
+									"// Validate response contains an array and has all the expected fields\r",
+									"pm.test(\"Response is an array and has all fields\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array')\r",
+									"    jsonData.forEach(function (item) {\r",
+									"        pm.expect(item).to.have.property(\"_id\");\r",
+									"        pm.expect(item).to.have.property(\"name\");\r",
+									"        pm.expect(item).to.have.property(\"type\");\r",
+									"        pm.expect(item).to.have.property(\"currentValue\");\r",
+									"    });\r",
+									"    console.log(\"Response contains an array and has all fields\");\r",
+									"});\r",
+									"\r",
+									"// Validate each element in array have their proper type\r",
+									"pm.test(\"Each element in array have their proper type\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.be.an('array');\r",
+									"    jsonData.forEach(function (item) {\r",
+									"        pm.expect(item._id).to.be.an('string');\r",
+									"        pm.expect(item.name).to.be.an('string');\r",
+									"        pm.expect(item.type).to.be.an('string');\r",
+									"        pm.expect(item.currentValue).to.be.an('number');\r",
+									"    });\r",
+									"    console.log(\"Response contains an array and each element in array have their proper type\");\r",
+									"});\r",
+									"\r",
+									"let item = pm.response.json().find(i => i.name === pm.collectionVariables.get(\"Asset\"));\r",
+									"pm.collectionVariables.set(\"currentValue\", item.currentValue);\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"292-xbtCG8/IbRqOJFu7GVLx/GKIZO0\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/available-investments",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"available-investments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-ValidPurchase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Request returns a 200 http status code",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    console.log(\"Request returned a 200 status code\");",
+									"});",
+									"",
+									"// Validate response body is a JSON",
+									"pm.test(\"Response body is a Json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"// Validate response time is less than 2 secs",
+									"pm.test(\"Response time is less than 2secs\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"    console.log(\"Response time was: \" + pm.response.responseTime);",
+									"});",
+									"",
+									"// Validate response contains status: done",
+									"pm.test(\"Body is correct\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"status\", \"done\");",
+									"    console.log(\"Body content is correct\");",
+									"});",
+									"",
+									"pm.collectionVariables.set(\"Holdings\", (pm.collectionVariables.get(\"Holdings\") + 1));",
+									"pm.collectionVariables.set(\"DiffHoldings\", (pm.collectionVariables.get(\"DiffHoldings\") + 1));",
+									"console.log(\"Holding value updated to: \", pm.collectionVariables.get(\"Holdings\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User-Porfolio - Validate purchase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Request returns a 200 http status code",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    console.log(\"Request returned a 200 status code\");",
+									"});",
+									"",
+									"// Validate response body is a JSON",
+									"pm.test(\"Response body is a Json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"// Validate response time is less than 2 secs",
+									"pm.test(\"Response time is less than 2secs\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"    console.log(\"Response time was: \" + pm.response.responseTime);",
+									"});",
+									"",
+									"// Validate field savings is not null or undefined",
+									"pm.test(\"Field savings is not null or undefined\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"savings\");",
+									"    pm.expect(jsonData.savings).to.not.be.null;",
+									"    pm.expect(jsonData.savings).to.not.be.undefined;",
+									"    console.log(\"Saving field is present and it is not null or empty\");",
+									"});",
+									"",
+									"// Validate field investments is present and is an array",
+									"pm.test(\"Field investments is present and is an array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"investments\");",
+									"    pm.expect(jsonData.investments).to.be.an('array');",
+									"    console.log(\"Investment field is present and it is an array\");",
+									"});",
+									"",
+									"// Validate savings were updated properly",
+									"pm.test(\"Validate savings were updated properly\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var newbalance = pm.collectionVariables.get(\"DiffHoldings\") * pm.collectionVariables.get(\"currentValue\");",
+									"    var newSavings = pm.collectionVariables.get(\"Savings\") - newbalance;",
+									"    pm.expect(jsonData.savings).to.be.eql(newSavings);",
+									"    console.log(\"New savings value is: \", jsonData.savings, \"\\nExpected saving value is: \", newSavings);",
+									"});",
+									"",
+									"// Validate holdings were updated properly",
+									"pm.test(\"Validate holdings were updated properly\", function () {",
+									"    let item = pm.response.json().investments.find(i => i.name === pm.collectionVariables.get(\"Asset\"));",
+									"    pm.expect(item.amountSubscribed).to.be.eql(pm.collectionVariables.get(\"Holdings\"));",
+									"    console.log(\"New holdings value is: \", item.amountSubscribed, \"\\nExpected saving value is: \", pm.collectionVariables.get(\"Holdings\"));",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"35f-WBJy3aaP8VK77AOf3OqA2gRI950\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/user-portfolio",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user-portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-ValidSale",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Request returns a 200 http status code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    console.log(\"Request returned a 200 status code\");\r",
+									"});\r",
+									"\r",
+									"// Validate response body is a JSON\r",
+									"pm.test(\"Response body is a Json\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"// Validate response time is less than 2 secs\r",
+									"pm.test(\"Response time is less than 2secs\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"    console.log(\"Response time was: \" + pm.response.responseTime);\r",
+									"});\r",
+									"\r",
+									"// Validate response contains status: done\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"status\", \"done\");\r",
+									"    console.log(\"Body content is correct\");\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"Holdings\", (pm.collectionVariables.get(\"Holdings\") - 1));\r",
+									"pm.collectionVariables.set(\"DiffHoldings\", (pm.collectionVariables.get(\"DiffHoldings\") - 1));\r",
+									"console.log(\"Holding value updated to: \", pm.collectionVariables.get(\"Holdings\"));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User-Porfolio - Validate sale",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Request returns a 200 http status code",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    console.log(\"Request returned a 200 status code\");",
+									"});",
+									"",
+									"// Validate response body is a JSON",
+									"pm.test(\"Response body is a Json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"// Validate response time is less than 2 secs",
+									"pm.test(\"Response time is less than 2secs\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"    console.log(\"Response time was: \" + pm.response.responseTime);",
+									"});",
+									"",
+									"// Validate field savings is not null or undefined",
+									"pm.test(\"Field savings is not null or undefined\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"savings\");",
+									"    pm.expect(jsonData.savings).to.not.be.null;",
+									"    pm.expect(jsonData.savings).to.not.be.undefined;",
+									"    console.log(\"Saving field is present and it is not null or empty\");",
+									"});",
+									"",
+									"// Validate field investments is present and is an array",
+									"pm.test(\"Field investments is present and is an array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"investments\");",
+									"    pm.expect(jsonData.investments).to.be.an('array');",
+									"    console.log(\"Investment field is present and it is an array\");",
+									"});",
+									"",
+									"// Validate savings were updated properly",
+									"pm.test(\"Validate savings were updated properly\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var newbalance = pm.collectionVariables.get(\"DiffHoldings\") * pm.collectionVariables.get(\"currentValue\");",
+									"    var newSavings = pm.collectionVariables.get(\"Savings\") - newbalance;",
+									"    pm.expect(jsonData.savings).to.be.eql(newSavings);",
+									"    console.log(\"New savings value is: \", jsonData.savings, \"\\nExpected saving value is: \", newSavings);",
+									"});",
+									"",
+									"// Validate holdings were updated properly",
+									"pm.test(\"Validate holdings were updated properly\", function () {",
+									"    let item = pm.response.json().investments.find(i => i.name === pm.collectionVariables.get(\"Asset\"));",
+									"    pm.expect(item.amountSubscribed).to.be.eql(pm.collectionVariables.get(\"Holdings\"));",
+									"    console.log(\"New holdings value is: \", item.amountSubscribed, \"\\nExpected saving value is: \", pm.collectionVariables.get(\"Holdings\"));",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"35f-WBJy3aaP8VK77AOf3OqA2gRI950\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/user-portfolio",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user-portfolio"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ManualTests",
+			"item": [
+				{
+					"name": "User-Porfolio-OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"35f-WBJy3aaP8VK77AOf3OqA2gRI950\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "connect.sid=s%3Afake123456.abcdefg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/user-portfolio",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user-portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User-Porfolio-WRONG-METHOD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"35f-WBJy3aaP8VK77AOf3OqA2gRI950\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "connect.sid=s%3Afake123456.abcdefg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/user-portfolio",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user-portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User-Porfolio-WITHOUT-HEADERS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"accept": true,
+							"user-agent": true,
+							"host": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/api/user-portfolio",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user-portfolio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User-Porfolio-WRONG-PATH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"35f-WBJy3aaP8VK77AOf3OqA2gRI950\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "connect.sid=s%3Afake123456.abcdefg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/user-portfolio//",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"user-portfolio",
+								"",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Available-Investiments-OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"292-xbtCG8/IbRqOJFu7GVLx/GKIZO0\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/available-investments",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"available-investments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Available-Investiments-WRONG-METHOD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"292-xbtCG8/IbRqOJFu7GVLx/GKIZO0\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/available-investments",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"available-investments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Available-Investiments-WITHOUT-HEADERS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"accept": true,
+							"user-agent": true,
+							"host": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}/api/available-investments",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"available-investments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Available-Investiments-WRONG-PATH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "if-none-match",
+								"value": "W/\"292-xbtCG8/IbRqOJFu7GVLx/GKIZO0\""
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "{{domain}}/api/available-investments",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"available-investments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-LONG-INT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1000000000000000000000000000000000}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-WRONG-METHOD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-WITHOUTH-HEADERS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"accept": true,
+							"user-agent": true,
+							"host": true,
+							"content-type": true,
+							"content-length": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-WRONG-PATH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy//",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy",
+								"",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-AMOUNT-ZERO",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":0}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-AMOUNT-NEGATIVE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":-1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-AMOUNT-INVALID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":\"abc\"}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-AMOUNT-EMPTY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":\"\" }"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-AMOUNT-WITHOUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\"}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-ITEMID-NON-EXISTENT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"NON-EXISTENT ID\" ,\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-ITEMID-INVALID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy-WITHOUT-BODY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-OK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-LONG-INT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":100000000000000000000000000000000000}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-WRONG-METHOD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-WITHOUTH-HEADERS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"accept": true,
+							"user-agent": true,
+							"host": true,
+							"content-type": true,
+							"content-length": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-WRONG-PATH",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell//",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell",
+								"",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-AMOUNT-ZERO",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":0}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sell-AMOUNT-NEGATIVE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":-1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-AMOUNT-INVALID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":\"abc\"}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-AMOUNT-EMPTY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":\"\" }"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-AMOUNT-WITHOUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\"}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/buy",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"buy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-ITEMID-NON-EXISTENT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"NON-EXISTENT ID\" ,\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-ITEMID-INVALID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"itemId\":\"a1\",\"amount\":1}"
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sell-WITHOUT-BODY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "accept-language",
+								"value": "en,es-ES;q=0.9,es;q=0.8"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json"
+							},
+							{
+								"key": "origin",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://sea-lion-app-7celq.ondigitalocean.app/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "Cookie",
+								"value": "{{Cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/api/sell",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"sell"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "domain",
+			"value": "https://sea-lion-app-7celq.ondigitalocean.app",
+			"type": "string"
+		},
+		{
+			"key": "amountSubscribed",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Savings",
+			"value": "4200000"
+		},
+		{
+			"key": "Cookie",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "DiffHoldings",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Asset",
+			"value": "Ternium Argentina",
+			"type": "string"
+		},
+		{
+			"key": "Holdings",
+			"value": ""
+		},
+		{
+			"key": "currentValue",
+			"value": ""
+		}
+	]
+}
