@@ -1,0 +1,20 @@
+{
+    "url": "https://sea-lion-app-7celq.ondigitalocean.app/",
+    "reports": "target/Report_smtm.html",
+    "screenshot": "target/screenshots/",
+    "test1data": {
+        "asset": "Ternium Argentina",
+        "quantity": "1",
+        "balance": "$ 41.873,75"
+    },
+    "test2data": {
+        "asset": "Ternium Argentina",
+        "quantity": "1",
+        "balance": "$ 42.126,25"
+    },
+    "test3data": {
+        "asset": "BOCAN 2022",
+        "quantity": "1",
+        "balance": "$ 41.910,00"
+    }
+}
