@@ -2,18 +2,34 @@ package smtm.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MisInversionesPage extends BasePage {
     // Locators
-    private By balanceValue = By.xpath("//p[text()='Caja de ahorro']/following-sibling::p[1]");
-    private By myInvestmentsButton = By.className("my-investments__title");
-    private By itemComprarBox = By.xpath("//p[text()='Comprar']/following-sibling::input");
-    private By itemComprarButton = By.xpath("//p[text()='Comprar']/following-sibling::button");
-    private By itemVenderBox = By.xpath("//p[text()='Vender']/following-sibling::input");
-    private By itemVenderButton = By.xpath("//p[text()='Vender']/following-sibling::button");
-    private By detailNofication = By.xpath("//*[@class='detail__notification']");
+    @FindBy(xpath = "//p[text()='Caja de ahorro']/following-sibling::p[1]")
+    WebElement balanceValue;
+
+    @FindBy(className = "my-investments__title")
+    WebElement myInvestmentsButton;
+
+    @FindBy(xpath = "//p[text()='Comprar']/following-sibling::input")
+    WebElement itemComprarBox;
+
+    @FindBy(xpath = "//p[text()='Comprar']/following-sibling::button")
+    WebElement itemComprarButton;
+
+    @FindBy(xpath = "//p[text()='Vender']/following-sibling::input")
+    WebElement itemVenderBox;
+
+    @FindBy(xpath = "//p[text()='Vender']/following-sibling::button")
+    WebElement itemVenderButton;
+
+    @FindBy(xpath = "//*[@class='detail__notification']")
+    WebElement detailNotication;
+
     private By myInvestmentItem;
     private By otherInvestmentItem;
     private By pieChartItem;
@@ -75,9 +91,8 @@ public class MisInversionesPage extends BasePage {
         return this.getText(pieChartItem);
     }
 
-    public String getDetailNotification(String status) {
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(detailNofication, status));
-        return this.getText(detailNofication);
+    public void getDetailNotification(String status) {
+        wait.until(ExpectedConditions.textToBePresentInElement(detailNotication, status));
     }
 
 }

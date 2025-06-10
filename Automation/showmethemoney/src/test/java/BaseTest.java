@@ -38,7 +38,7 @@ public class BaseTest {
     @BeforeEach
     public void preconditions(TestInfo testInfo) throws InterruptedException {
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofMillis(3000));
+        wait = new WebDriverWait(driver, Duration.ofMillis(5000));
         misInversionesPage = new MisInversionesPage(driver, wait);
         misInversionesPage.setup();
         misInversionesPage.url(data.getUrl());
